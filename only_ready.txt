@@ -1,0 +1,67 @@
+AURORA ES  -  Flight Ready
+AURORA LX  -  Flight Ready
+AURORA MR  -  Flight Ready
+AURORA CL  -  Flight Ready
+AURORA LN  -  Flight Ready
+300I  -  Flight Ready
+315P  -  Flight Ready
+325A  -  Flight Ready
+350R  -  Flight Ready
+F7C HORNET  -  Flight Ready
+F7C HORNET WILDFIRE  -  Flight Ready
+F7C-S HORNET GHOST  -  Flight Ready
+F7C-R HORNET TRACKER  -  Flight Ready
+F7C-M SUPER HORNET  -  Flight Ready
+CONSTELLATION AQUILA  -  Flight Ready
+CONSTELLATION ANDROMEDA  -  Flight Ready
+CONSTELLATION TAURUS  -  Hangar Ready
+CONSTELLATION PHOENIX  -  Hangar Ready
+FREELANCER  -  Flight Ready
+CUTLASS BLACK  -  Flight Ready
+CUTLASS RED  -  Hangar Ready
+CUTLASS BLUE  -  Hangar Ready
+AVENGER STALKER  -  Flight Ready
+AVENGER TITAN RENEGADE  -  Flight Ready
+AVENGER WARLOCK  -  Flight Ready
+AVENGER TITAN  -  Flight Ready
+GLADIATOR  -  Flight Ready
+M50  -  Flight Ready
+STARFARER  -  Flight Ready
+STARFARER GEMINI  -  Flight Ready
+CATERPILLAR  -  Flight Ready
+CATERPILLAR PIRATE EDITION  -  Flight Ready
+RETALIATOR BOMBER  -  Flight Ready
+SCYTHE  -  Flight Ready
+P52 MERLIN  -  Flight Ready
+MUSTANG ALPHA  -  Flight Ready
+MUSTANG BETA  -  Flight Ready
+MUSTANG GAMMA  -  Flight Ready
+MUSTANG DELTA  -  Flight Ready
+MUSTANG OMEGA  -  Flight Ready
+REDEEMER  -  Hangar Ready
+GLADIUS  -  Flight Ready
+GLADIUS VALIANT  -  Flight Ready
+KHARTU-AL  -  Flight Ready
+HERALD  -  Flight Ready
+RECLAIMER  -  Flight Ready
+VANGUARD WARDEN  -  Flight Ready
+VANGUARD HOPLITE  -  Flight Ready
+RELIANT KORE  -  Flight Ready
+GLAIVE  -  Flight Ready
+SABRE  -  Flight Ready
+SABRE COMET  -  Flight Ready
+SABRE RAVEN  -  Flight Ready
+PROSPECTOR  -  Flight Ready
+DRAGONFLY YELLOWJACKET  -  Flight Ready
+DRAGONFLY BLACK  -  Flight Ready
+MPUV PERSONNEL  -  Flight Ready
+MPUV CARGO  -  Flight Ready
+TERRAPIN  -  Flight Ready
+85X  -  Flight Ready
+RAZOR  -  Flight Ready
+RAZOR EX  -  Flight Ready
+RAZOR LX  -  Flight Ready
+NOX  -  Flight Ready
+NOX KUE  -  Flight Ready
+CYCLONE  -  Flight Ready
+URSA ROVER  -  Flight Ready
