@@ -18,8 +18,6 @@ async def on_message(message):
         msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
     if message.content.startswith('!all_ships'):
-        await client.send_message(message.channel, "out of service, fuck you arnau")
-    if message.content.startswith('!all_ships_deb'):
         await client.send_message(message.channel, "gimme a second...")
         ff = fetcher.start_webdriver()
         ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
