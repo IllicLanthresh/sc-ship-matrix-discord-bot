@@ -27,10 +27,12 @@ async def on_message(message):
         await client.send_message(message.channel, "there u go:")
 
         textwrap.TextWrapper(width=2000, break_long_words=False, replace_whitespace=False)
+        
 
-        for chunk in [ships[i:i+2000] for i in range(0, len(ships), 2000)]:
-            await client.send_message(message.channel, chunk)
-            print(chunk)
+
+        #for chunk in [ships[i:i+2000] for i in range(0, len(ships), 2000)]:
+        #    await client.send_message(message.channel, chunk)
+        #    print(chunk)
 
 @client.event
 async def on_ready():
