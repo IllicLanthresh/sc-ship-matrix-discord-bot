@@ -1,9 +1,0 @@
-1527889955660	geckodriver	INFO	geckodriver 0.20.1
-1527889955663	geckodriver	INFO	Listening on 127.0.0.1:51539
-1527889956673	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-headless" "-profile" "/tmp/rust_mozprofile.vHiwSnKbS3jb"
-*** You are running in headless mode.
-1527889957721	Marionette	INFO	Listening on port 36795
-1527889957781	Marionette	WARN	TLS certificate errors will be ignored for this session
-JavaScript warning: https://robertsspaceindustries.com/cache/en/rsi-js.js?v=1.8.2.0, line 2229: Error: WebGL warning: Can't use WebGL in headless mode (https://bugzil.la/1375585).
-JavaScript warning: https://robertsspaceindustries.com/cache/en/rsi-js.js?v=1.8.2.0, line 2229: Error: WebGL warning: Failed to create WebGL context: WebGL creation failed: 
-* Can't use WebGL in headless mode (https://bugzil.la/1375585).
