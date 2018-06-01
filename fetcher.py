@@ -7,35 +7,46 @@ from selenium.webdriver.common.by import By
 
 ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
 
-print("target URL set to:", ship_matrix_URL)
+def start_webdriver():
+    #print("target URL set to:", url)
 
-print("setting headless arguments")
-options = opts()
-options.set_headless(headless=True)
+    #print("setting headless arguments")
+    options = opts()
+    options.set_headless(headless=True)
 
-print("setting webdriver")
+    #print("setting webdriver")
 
-ff = wd.Firefox(firefox_options=options)
+    ff = wd.Firefox(firefox_options=options)
 
-print("waiting for get response...")
+    return ff
 
-ff.get(ship_matrix_URL)
+def get_ship_matrix(ff, url):
+    #print("waiting for get response...")
 
-print("waiting for ship matrix to load...")
+    ff.get(url)
 
-WebDriverWait(ff, 3).until(
-    EC.presence_of_element_located((By.ID, 'statsruler-top')))
+    #print("waiting for ship matrix to load...")
 
-print("fetching all ships...")
+    WebDriverWait(ff, 3).until(
+        EC.presence_of_element_located((By.ID, 'statsruler-top')))
 
-elems = ff.find_element_by_id(
-    "shipscontainer").find_elements_by_class_name("ship")
+    #print("fetching all ships...")
 
-print(len(elems), "ships found:")
+    ship_matrix = ff.find_element_by_id(
+        "shipscontainer").find_elements_by_class_name("ship")
 
-for elem in elems:
-    # print(elems[0].get_attribute("innerHTML"))
-    print(elem.find_element_by_class_name("title").get_attribute("innerText"), " - ",
-          elem.find_element_by_class_name("production_status").get_attribute("innerText").strip())
+    #print(len(ships), "ships found:")
+    return ship_matrix
 
-ff.quit()
+def stop_webdriver(ff):
+    ff.quit()
+
+def get_all_ships(ship_matrix):
+    ships = ""
+    for ship in ship_matrix:
+        # print(ships[0].get_attribute("innerHTML"))
+        ships += ship.find_element_by_class_name("title").get_attribute("innerText")
+        ships += " - "
+        ships += ship.find_element_by_class_name("production_status").get_attribute("innerText").strip()
+        ships += "\n"
+    return ships

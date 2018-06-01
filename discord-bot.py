@@ -1,4 +1,5 @@
 import discord
+import fetcher
 
 client = discord.Client()
 
@@ -12,8 +13,21 @@ async def on_message(message):
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
     if message.content.startswith('!hammerhead'):
-        msg = 'rat1on thinks the hammerhead it\'s beautiful'.format(message)
+        msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
+    if message.content.startswith('!all_ships'):
+        await client.send_message(message.channel, "gimme a second...")
+        ff = fetcher.start_webdriver()
+        ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
+        await client.send_message(message.channel, "almost finished...")
+        ships = fetcher.get_all_ships(ship_matrix)
+        await client.send_message(message.channel, "there u go:")
+
+        
+
+        for chunk in [ships[i:i+2000] for i in range(0, len(ships), 2000)]:
+            await client.send_message(message.channel, chunk)
+            print(chunk)
 
 @client.event
 async def on_ready():
