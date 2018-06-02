@@ -3,17 +3,17 @@ import fetcher
 import chunker
 import threading
 
-def fetch():
+def fetch_all():
     # do something here ...
     ff = fetcher.start_webdriver()
     ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
     ships = fetcher.get_all_ships(ship_matrix)
 
-    with open('fetched.txt', 'w') as f:
+    with open('fetched_all.txt', 'w') as f:
         f.write(ships)
-        print("fetched ship matrix")
+        print("fetched all")
 
-    threading.Timer(60, fetch).start()
+    threading.Timer(60, fetch_all).start()
 
 client = discord.Client()
 
@@ -30,11 +30,8 @@ async def on_message(message):
         msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
     if message.content.startswith('!dev_all_ships'):
-
-        with open('fetched.txt') as f:
+        with open('fetched_all.txt') as f:
             ships = f.read()
-
-
         for chunk in chunker.split(ships, 2000):
             await client.send_message(message.channel, chunk)
 
@@ -45,5 +42,5 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-fetch()
+fetch_all()
 client.run('NDUyMTk3NTk1OTUyMTg1MzU3.DfM61w.4CkpZGofxu7SBv9g8709b-GnBsY')
