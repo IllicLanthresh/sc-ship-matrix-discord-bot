@@ -1,0 +1,123 @@
+AURORA ES - Flight Ready
+AURORA LX - Flight Ready
+AURORA MR - Flight Ready
+AURORA CL - Flight Ready
+AURORA LN - Flight Ready
+300I - Flight Ready
+315P - Flight Ready
+325A - Flight Ready
+350R - Flight Ready
+F7C HORNET - Flight Ready
+F7C HORNET WILDFIRE - Flight Ready
+F7C-S HORNET GHOST - Flight Ready
+F7C-R HORNET TRACKER - Flight Ready
+F7C-M SUPER HORNET - Flight Ready
+F7A HORNET - Announced
+CONSTELLATION AQUILA - Flight Ready
+CONSTELLATION ANDROMEDA - Flight Ready
+CONSTELLATION TAURUS - Hangar Ready
+CONSTELLATION PHOENIX - Hangar Ready
+CONSTELLATION PHOENIX EMERALD - In Concept
+FREELANCER - Flight Ready
+FREELANCER DUR - In Concept
+FREELANCER MAX - In Concept
+FREELANCER MIS - In Concept
+CUTLASS BLACK - Flight Ready
+CUTLASS RED - Hangar Ready
+CUTLASS BLUE - Hangar Ready
+AVENGER STALKER - Flight Ready
+AVENGER TITAN RENEGADE - Flight Ready
+AVENGER WARLOCK - Flight Ready
+AVENGER TITAN - Flight Ready
+GLADIATOR - Flight Ready
+M50 - Flight Ready
+STARFARER - Flight Ready
+STARFARER GEMINI - Flight Ready
+CATERPILLAR - Flight Ready
+CATERPILLAR PIRATE EDITION - Flight Ready
+RETALIATOR BOMBER - Flight Ready
+RETALIATOR BASE - In Concept
+SCYTHE - Flight Ready
+IDRIS-M - In Production
+IDRIS-P - In Production
+P52 MERLIN - Flight Ready
+MUSTANG ALPHA - Flight Ready
+MUSTANG BETA - Flight Ready
+MUSTANG GAMMA - Flight Ready
+MUSTANG DELTA - Flight Ready
+MUSTANG OMEGA - Flight Ready
+REDEEMER - Hangar Ready
+GLADIUS - Flight Ready
+GLADIUS VALIANT - Flight Ready
+KHARTU-AL - Flight Ready
+MERCHANTMAN - In Concept
+890 JUMP - In Production
+CARRACK - In Concept
+HERALD - Flight Ready
+HULL C - In Production
+HULL A - In Concept
+HULL B - In Concept
+HULL D - In Concept
+HULL E - In Concept
+ORION - In Concept
+RECLAIMER - Flight Ready
+JAVELIN - In Production
+VANGUARD WARDEN - Flight Ready
+VANGUARD HARBINGER - In Concept
+VANGUARD SENTINEL - In Concept
+VANGUARD HOPLITE - Flight Ready
+RELIANT KORE - Flight Ready
+RELIANT MAKO - In Concept
+RELIANT SEN - In Concept
+RELIANT TANA - In Concept
+GENESIS STARLINER - In Production
+GLAIVE - Flight Ready
+ENDEAVOR - In Concept
+SABRE - Flight Ready
+SABRE COMET - Flight Ready
+SABRE RAVEN - Flight Ready
+CRUCIBLE - In Concept
+P72 ARCHIMEDES - In Concept
+BLADE - In Concept
+PROSPECTOR - Flight Ready
+BUCCANEER - In Production
+DRAGONFLY YELLOWJACKET - Flight Ready
+DRAGONFLY BLACK - Flight Ready
+MPUV PERSONNEL - Flight Ready
+MPUV CARGO - Flight Ready
+TERRAPIN - Flight Ready
+POLARIS - In Concept
+PROWLER - In Concept
+85X - Flight Ready
+RAZOR - Flight Ready
+RAZOR EX - Flight Ready
+RAZOR LX - Flight Ready
+HURRICANE - In Concept
+DEFENDER - In Concept
+ECLIPSE - In Concept
+NOX - Flight Ready
+NOX KUE - Flight Ready
+CYCLONE - Flight Ready
+CYCLONE-TR - In Concept
+CYCLONE-RC - In Concept
+CYCLONE-RN - In Concept
+CYCLONE-AA - In Concept
+URSA ROVER - Flight Ready
+600I TOURING - In Concept
+600I EXPLORER - In Concept
+X1 BASE - In Concept
+X1 VELOCITY - In Concept
+X1 FORCE - In Concept
+PIONEER - In Concept
+HAWK - In Concept
+HAMMERHEAD - In Concept
+GEOTACK PLANETARY BEACON - In Concept
+GEOTACK-X PLANETARY BEACON - N/A
+NOVA TANK - In Concept
+VULCAN - In Concept
+100I - In Concept
+125A - In Concept
+135C - In Concept
+C2 HERCULES - N/A
+M2 HERCULES - N/A
+A2 HERCULES - N/A

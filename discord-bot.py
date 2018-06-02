@@ -11,7 +11,7 @@ def fetch():
 
     with open('fetched.txt', 'w') as f:
         f.write(ships)
-        print(f.read())
+        print("fetched ship matrix")
 
     threading.Timer(60, fetch).start()
 
