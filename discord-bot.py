@@ -1,7 +1,19 @@
 import discord
 import fetcher
-import textwrap
 import chunker
+import threading
+
+def fetch():
+    # do something here ...
+    ff = fetcher.start_webdriver()
+    ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
+    ships = fetcher.get_all_ships(ship_matrix)
+
+    with open('fetched.txt') as f:
+        f.write(ships, 'w')
+        print(f.read())
+
+    threading.Timer(60, fetch).start()
 
 client = discord.Client()
 
@@ -17,18 +29,14 @@ async def on_message(message):
     if message.content.startswith('!hammerhead'):
         msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
-    if message.content.startswith('!all_ships'):
-        await client.send_message(message.channel, "gimme a second...")
-        ff = fetcher.start_webdriver()
-        ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
-        await client.send_message(message.channel, "almost finished...")
-        ships = fetcher.get_all_ships(ship_matrix)
-        await client.send_message(message.channel, "there u go:")
+    if message.content.startswith('!dev_all_ships'):
+
+        with open('fetched.txt') as f:
+            ships = f.read()
 
 
         for chunk in chunker.split(ships, 2000):
             await client.send_message(message.channel, chunk)
-            print(chunk)
 
 @client.event
 async def on_ready():
