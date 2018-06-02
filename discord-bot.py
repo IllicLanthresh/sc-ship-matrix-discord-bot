@@ -13,7 +13,7 @@ def fetch_all():
         f.write(ships)
         print("fetched all")
 
-    threading.Timer(60, fetch_all).start()
+    threading.Timer(60*10, fetch_all).start()
 
 client = discord.Client()
 
@@ -29,7 +29,7 @@ async def on_message(message):
     if message.content.startswith('!hammerhead'):
         msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
-    if message.content.startswith('!dev_all_ships'):
+    if message.content.startswith('!all_ships'):
         with open('fetched_all.txt') as f:
             ships = f.read()
         for chunk in chunker.split(ships, 2000):
