@@ -9,8 +9,8 @@ def fetch():
     ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
     ships = fetcher.get_all_ships(ship_matrix)
 
-    with open('fetched.txt') as f:
-        f.write(ships, 'w')
+    with open('fetched.txt', 'w') as f:
+        f.write(ships)
         print(f.read())
 
     threading.Timer(60, fetch).start()
