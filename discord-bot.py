@@ -4,7 +4,7 @@ import chunker
 import threading
 
 def fetch_all():
-    # do something here ...
+    
     ff = fetcher.start_webdriver()
     ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
     ships = fetcher.get_all_ships(ship_matrix)
@@ -13,6 +13,7 @@ def fetch_all():
         f.write(ships)
         print("fetched all")
 
+    fetcher.stop_webdriver(ff)
     threading.Timer(60*10, fetch_all).start()
 
 client = discord.Client()
