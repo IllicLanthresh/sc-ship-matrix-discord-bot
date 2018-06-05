@@ -25,6 +25,14 @@ async def on_message(message):
 
         for chunk in chunker.make_chunks(msg, 2000):
             await client.send_message(message.channel, chunk)
+    if message.content.startswith('!flight_ready'):
+        msg = "Flight Ready ships list:\n\n\n"
+
+        for ship in matrix.getFlightReady():
+            msg += "%(name)s:\n\tlink: <%(link)s>\n" % ship
+
+        for chunk in chunker.make_chunks(msg, 2000):
+            await client.send_message(message.channel, chunk)
 
 @client.event
 async def on_ready():

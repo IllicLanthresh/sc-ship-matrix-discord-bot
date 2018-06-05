@@ -21,6 +21,15 @@ class ShipMatrix:
         with open('fetched.json') as f:
             ships = json.load(f)
         return ships
+    def getFlightReady(self):
+        with open('fetched.json') as f:
+            ships = json.load(f)
+        
+        filtered_ships = []
+        for ship in ships:
+            if (ship['status'] == "Flight Ready"): filtered_ships.append(ship)
+
+        return filtered_ships
 
 
 class ShipMatrixFetcher:
