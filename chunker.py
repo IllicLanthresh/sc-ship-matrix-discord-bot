@@ -1,4 +1,4 @@
-def split(unchunked_text, limit):
+def make_chunks(unchunked_text, limit):
     chunks = []
 
     while unchunked_text:

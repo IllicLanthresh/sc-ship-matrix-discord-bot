@@ -1,28 +1,7 @@
 import discord
-import fetcher
+from ship_matrix import ShipMatrix
 import chunker
-import threading
 
-def fetch_all():
-    
-    ff = fetcher.start_webdriver()
-    print("started webdriver")
-    ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
-    print("got shipmatrix")
-    ships = fetcher.get_all_ships(ship_matrix)
-    print("got all ships")
-
-    with open('fetched_all.txt', 'w') as f:
-        f.write(ships)
-        print("fetched all - saved into 'fetched_all.txt'")
-
-    fetcher.stop_webdriver(ff)
-    print("stopped webdriver")
-    threading.Timer(60*10, fetch_all).start()
-    print("setted new timed thread")
-    print('------')
-
-client = discord.Client()
 
 @client.event
 async def on_message(message):
@@ -37,9 +16,13 @@ async def on_message(message):
         msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
     if message.content.startswith('!all_ships'):
-        with open('fetched_all.txt') as f:
-            ships = f.read()
-        for chunk in chunker.split(ships, 2000):
+        ships = matrix.getAll()
+        msg = ""
+
+        for ship in ships:
+            msg += "%(name)s:\n\tStatus: %(status)s\n\tlink: %(link)s\n" % ship
+
+        for chunk in chunker.make_chunks(message, 2000):
             await client.send_message(message.channel, chunk)
 
 @client.event
@@ -49,5 +32,7 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-fetch_all()
+
+client = discord.Client()
+matrix = ShipMatrix()
 client.run('NDUyMTk3NTk1OTUyMTg1MzU3.DfM61w.4CkpZGofxu7SBv9g8709b-GnBsY')
