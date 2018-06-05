@@ -23,7 +23,7 @@ async def on_message(message):
         for ship in matrix.getAll():
             msg += "%(name)s:\n\tStatus: %(status)s\n\tlink: %(link)s\n" % ship
 
-        for chunk in chunker.make_chunks(message, 2000):
+        for chunk in chunker.make_chunks(msg, 2000):
             await client.send_message(message.channel, chunk)
 
 @client.event
