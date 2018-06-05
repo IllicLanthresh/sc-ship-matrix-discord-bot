@@ -35,4 +35,4 @@ async def on_ready():
 
 
 
-client.run('NDUyMTk3NTk1OTUyMTg1MzU3.DfM61w.4CkpZGofxu7SBv9g8709b-GnBsY')
+client.run('***REMOVED***')
