@@ -16,10 +16,9 @@ async def on_message(message):
         msg = 'rat1on thinks the hammerhead it\'s beautiful'
         await client.send_message(message.channel, msg)
     if message.content.startswith('!all_ships'):
-        ships = matrix.getAll()
         msg = ""
 
-        for ship in ships:
+        for ship in matrix.getAll():
             msg += "%(name)s:\n\tStatus: %(status)s\n\tlink: %(link)s\n" % ship
 
         for chunk in chunker.make_chunks(message, 2000):

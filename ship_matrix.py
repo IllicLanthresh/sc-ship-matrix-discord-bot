@@ -22,7 +22,6 @@ class ShipMatrix:
             ships = json.load(f)
         return ships
 
-        
 
 class ShipMatrixFetcher:
 
@@ -79,10 +78,16 @@ class ShipMatrixFetcher:
         ships = []
         for ship in ship_matrix:
             dict_entry = {}
+
             dict_entry['name'] = ship.find_element_by_class_name(
-                "title").get_attribute("innerText")
+                "title").get_attribute("innerText").strip()
+
             dict_entry['status'] = ship.find_element_by_class_name(
                 "production_status").get_attribute("innerText").strip()
+
+            dict_entry['link'] = ship.find_element_by_class_name("actionscontainer").find_element_by_class_name(
+                "statbox").find_element_by_class_name("other").get_attribute("href")
+
             ships.append(dict_entry)
         return json.dumps(ships, indent=4)
 
