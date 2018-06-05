@@ -42,6 +42,11 @@ class ShipMatrixFetcher:
         print("Started webdriver")
 
         raw_shipmatrix = self.get_raw_shipmatrix(ff, self.ship_matrix_URL)
+        
+        if (raw_shipmatrix==None):
+            print("Failed to connect to website, retry in 10 mins...")
+            self.start_timmed_fether()
+            return
         print("Got shipmatrix in raw format")
 
         ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
@@ -75,9 +80,12 @@ class ShipMatrixFetcher:
 
         ff.get(url)
 
-        WebDriverWait(ff, 3).until(
-            EC.presence_of_element_located((By.ID, 'statsruler-top')))
-
+        try:
+            WebDriverWait(ff, 3).until(
+                EC.presence_of_element_located((By.ID, 'statsruler-top')))
+        finally:
+            self.stop_webdriver(ff)
+            return
         ship_matrix = ff.find_element_by_id(
             "shipscontainer").find_elements_by_class_name("ship")
 
