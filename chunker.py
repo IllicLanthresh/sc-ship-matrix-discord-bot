@@ -9,7 +9,6 @@ def split(unchunked_text, limit):
             index = unchunked_text.rfind("\n", 0, limit)
             if index == -1:
                 return "can't do it"
-                break
             chunks.append(unchunked_text[:index+1])
             unchunked_text = unchunked_text[index+1:]
     return chunks

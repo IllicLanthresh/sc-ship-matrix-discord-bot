@@ -118,6 +118,6 @@ VULCAN - In Concept
 100I - In Concept
 125A - In Concept
 135C - In Concept
-C2 HERCULES - N/A
-M2 HERCULES - N/A
-A2 HERCULES - N/A
+C2 HERCULES - In Concept
+M2 HERCULES - In Concept
+A2 HERCULES - In Concept
