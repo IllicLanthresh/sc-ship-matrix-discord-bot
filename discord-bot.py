@@ -6,15 +6,21 @@ import threading
 def fetch_all():
     
     ff = fetcher.start_webdriver()
+    print("started webdriver")
     ship_matrix = fetcher.get_ship_matrix(ff, fetcher.ship_matrix_URL)
+    print("got shipmatrix")
     ships = fetcher.get_all_ships(ship_matrix)
+    print("got all ships")
 
     with open('fetched_all.txt', 'w') as f:
         f.write(ships)
-        print("fetched all")
+        print("fetched all - saved into 'fetched_all.txt'")
 
     fetcher.stop_webdriver(ff)
+    print("stopped webdriver")
     threading.Timer(60*10, fetch_all).start()
+    print("setted new timed thread")
+    print('------')
 
 client = discord.Client()
 
