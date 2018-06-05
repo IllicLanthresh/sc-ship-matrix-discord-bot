@@ -58,7 +58,7 @@ class ShipMatrixFetcher:
 
         ff = wd.Firefox(firefox_options=options)
 
-        print("Started WebDriver Firefox headless mode")
+        print("Setted WebDriver Firefox as headless mode")
 
         return ff
 
