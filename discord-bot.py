@@ -2,6 +2,8 @@ import discord
 from ship_matrix import ShipMatrix
 import chunker
 
+client = discord.Client()
+matrix = ShipMatrix()
 
 @client.event
 async def on_message(message):
@@ -32,6 +34,5 @@ async def on_ready():
     print('------')
 
 
-client = discord.Client()
-matrix = ShipMatrix()
+
 client.run('NDUyMTk3NTk1OTUyMTg1MzU3.DfM61w.4CkpZGofxu7SBv9g8709b-GnBsY')
