@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 
 import threading
 import json
+from jsondiff import diff
 
 
 class ShipMatrix:
@@ -49,12 +50,39 @@ class ShipMatrixFetcher:
             return
         print("Got shipmatrix in raw format")
 
-        ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
+        ships = self.raw_shipmatrix_to_json_string(raw_shipmatrix)
         print("Parsed all ships to json format")
 
-        with open('fetched.json', 'w') as f:
-            f.write(ships)
-            print("Fetched all - cached into 'fetched.json'")
+        with open('fetched.json', 'r') as f:
+            cached_ships = f.read()
+
+        if (cached_ships != ships):
+            #changes on shipmatrix, TODO:look for changes and send msg to discord
+            #       "{'0': {'$delete': ['link']}, '1': {'status': 'In Concept', '$delete': ['link']}}
+            #        >>> print(json.dumps(c, indent=4))
+            #        {
+            #            "0": {
+            #                "$delete": [
+            #                    "link"
+            #                ]
+            #            },
+            #            "1": {
+            #                "status": "In Concept",
+            #                "$delete": [
+            #                    "link"
+            #                ]
+            #            }
+            #        }"
+            cached_json = json.loads(cached_ships)
+            ships_json = json.loads(ships)
+
+
+
+            with open('fetched.json', 'w') as f:
+                f.write(ships)
+                print("Fetched all - cached into 'fetched.json'")
+        else:
+            print("No changes on ship matrix keep current chached version")
 
         self.stop_webdriver(ff)
         print("Stopped webdriver")
@@ -91,7 +119,7 @@ class ShipMatrixFetcher:
 
         return ship_matrix
 
-    def raw_shipmatrix_to_json(self, ship_matrix):
+    def raw_shipmatrix_to_json_string(self, ship_matrix):
         ships = []
         for ship in ship_matrix:
             dict_entry = {}
