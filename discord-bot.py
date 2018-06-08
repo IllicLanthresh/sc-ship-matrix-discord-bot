@@ -3,7 +3,7 @@ from ship_matrix import ShipMatrix
 import chunker
 
 client = discord.Client()
-matrix = ShipMatrix()
+matrix = ShipMatrix(client)
 
 @client.event
 async def on_message(message):
