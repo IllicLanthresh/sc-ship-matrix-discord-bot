@@ -58,7 +58,7 @@ class ShipMatrixFetcher:
             print("Parsed all ships to json format")
 
             with open('fetched.json', 'w') as f:
-                await f.write(ships)
+                f.write(ships)
                 print("Fetched all - cached into 'fetched.json'")
 
             await self.stop_webdriver(ff)
@@ -71,7 +71,7 @@ class ShipMatrixFetcher:
         options = opts()
         options.set_headless(headless=True)
 
-        ff = await wd.Firefox(firefox_options=options)
+        ff = wd.Firefox(firefox_options=options)
 
         print("Setted WebDriver Firefox as headless mode")
 
@@ -80,11 +80,11 @@ class ShipMatrixFetcher:
     async def get_raw_shipmatrix(self, ff, url):
 
         try:
-            await ff.get(url)
+            ff.get(url)
             WebDriverWait(ff, 3).until(
                 EC.presence_of_element_located((By.ID, 'statsruler-top')))
         except:
-            self.stop_webdriver(ff)
+            await self.stop_webdriver(ff)
             return
         ship_matrix = ff.find_element_by_id(
             "shipscontainer").find_elements_by_class_name("ship")
@@ -96,13 +96,13 @@ class ShipMatrixFetcher:
         for ship in ship_matrix:
             dict_entry = {}
 
-            dict_entry['name'] = await ship.find_element_by_class_name(
+            dict_entry['name'] = ship.find_element_by_class_name(
                 "title").get_attribute("innerText").strip()
 
-            dict_entry['status'] = await ship.find_element_by_class_name(
+            dict_entry['status'] = ship.find_element_by_class_name(
                 "production_status").get_attribute("innerText").strip()
 
-            dict_entry['link'] = await ship.find_element_by_class_name("actionscontainer").find_element_by_class_name(
+            dict_entry['link'] = ship.find_element_by_class_name("actionscontainer").find_element_by_class_name(
                 "statbox").find_element_by_class_name("other").get_attribute("href")
 
             ships.append(dict_entry)
