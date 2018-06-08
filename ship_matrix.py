@@ -51,14 +51,14 @@ class ShipMatrixFetcher:
             if (raw_shipmatrix==None):
                 print("Failed to connect to website, retry in 10 mins...")
                 await asyncio.sleep(30)
-                return
+                continue
             print("Got shipmatrix in raw format")
 
             ships = await self.raw_shipmatrix_to_json(raw_shipmatrix)
             print("Parsed all ships to json format")
 
             with open('fetched.json', 'w') as f:
-                f.write(ships)
+                await f.write(ships)
                 print("Fetched all - cached into 'fetched.json'")
 
             await self.stop_webdriver(ff)
@@ -71,7 +71,7 @@ class ShipMatrixFetcher:
         options = opts()
         options.set_headless(headless=True)
 
-        ff = wd.Firefox(firefox_options=options)
+        ff = await wd.Firefox(firefox_options=options)
 
         print("Setted WebDriver Firefox as headless mode")
 
@@ -80,7 +80,7 @@ class ShipMatrixFetcher:
     async def get_raw_shipmatrix(self, ff, url):
 
         try:
-            ff.get(url)
+            await ff.get(url)
             WebDriverWait(ff, 3).until(
                 EC.presence_of_element_located((By.ID, 'statsruler-top')))
         except:
@@ -96,13 +96,13 @@ class ShipMatrixFetcher:
         for ship in ship_matrix:
             dict_entry = {}
 
-            dict_entry['name'] = ship.find_element_by_class_name(
+            dict_entry['name'] = await ship.find_element_by_class_name(
                 "title").get_attribute("innerText").strip()
 
-            dict_entry['status'] = ship.find_element_by_class_name(
+            dict_entry['status'] = await ship.find_element_by_class_name(
                 "production_status").get_attribute("innerText").strip()
 
-            dict_entry['link'] = ship.find_element_by_class_name("actionscontainer").find_element_by_class_name(
+            dict_entry['link'] = await ship.find_element_by_class_name("actionscontainer").find_element_by_class_name(
                 "statbox").find_element_by_class_name("other").get_attribute("href")
 
             ships.append(dict_entry)
