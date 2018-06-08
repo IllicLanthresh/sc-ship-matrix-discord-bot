@@ -14,9 +14,7 @@ class ShipMatrix:
 
     def __init__(self, client):
 
-        fetcher = ShipMatrixFetcher()
-
-        client.loop.create_task(fetcher.fetch(client))
+        fetcher = ShipMatrixFetcher(client)
 
     def getAll(self):
         with open('fetched.json') as f:
@@ -36,6 +34,9 @@ class ShipMatrix:
 class ShipMatrixFetcher:
 
     ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
+
+    def __init__(self, client):
+        client.loop.create_task(self.fetch(client))
 
     async def fetch(self, client):
 
