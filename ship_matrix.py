@@ -50,7 +50,7 @@ class ShipMatrixFetcher:
             
             if (raw_shipmatrix==None):
                 print("Failed to connect to website, retry in 10 mins...")
-                await asyncio.sleep(60*10)
+                await asyncio.sleep(30)
                 return
             print("Got shipmatrix in raw format")
 
@@ -63,7 +63,7 @@ class ShipMatrixFetcher:
 
             await self.stop_webdriver(ff)
             print("Stopped webdriver")
-            await asyncio.sleep(60*10)
+            await asyncio.sleep(30)
 
     async def start_webdriver(self):
 
