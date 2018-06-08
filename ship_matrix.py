@@ -64,6 +64,7 @@ class ShipMatrixFetcher:
             await self.stop_webdriver(ff)
             print("Stopped webdriver")
             await asyncio.sleep(30)
+        print("client is closed")
 
     async def start_webdriver(self):
 
