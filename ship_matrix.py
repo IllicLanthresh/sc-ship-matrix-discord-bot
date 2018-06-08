@@ -40,29 +40,31 @@ class ShipMatrixFetcher:
 
     async def fetch(self, client):
 
-        await client.wait_until_ready()
+        while not client.is_closed:
 
-        ff = self.start_webdriver()
-        print("Started webdriver")
+            await client.wait_until_ready()
 
-        raw_shipmatrix = self.get_raw_shipmatrix(ff, self.ship_matrix_URL)
-        
-        if (raw_shipmatrix==None):
-            print("Failed to connect to website, retry in 10 mins...")
+            ff = self.start_webdriver()
+            print("Started webdriver")
+
+            raw_shipmatrix = self.get_raw_shipmatrix(ff, self.ship_matrix_URL)
+            
+            if (raw_shipmatrix==None):
+                print("Failed to connect to website, retry in 10 mins...")
+                await asyncio.sleep(60*10)
+                return
+            print("Got shipmatrix in raw format")
+
+            ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
+            print("Parsed all ships to json format")
+
+            with open('fetched.json', 'w') as f:
+                f.write(ships)
+                print("Fetched all - cached into 'fetched.json'")
+
+            self.stop_webdriver(ff)
+            print("Stopped webdriver")
             await asyncio.sleep(60*10)
-            return
-        print("Got shipmatrix in raw format")
-
-        ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
-        print("Parsed all ships to json format")
-
-        with open('fetched.json', 'w') as f:
-            f.write(ships)
-            print("Fetched all - cached into 'fetched.json'")
-
-        self.stop_webdriver(ff)
-        print("Stopped webdriver")
-        await asyncio.sleep(60*10)
 
     # def start_timmed_fether(self):
     #     threading.Timer(60*10, self.fetch).start()
