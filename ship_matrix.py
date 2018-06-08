@@ -35,7 +35,7 @@ class ShipMatrixFetcher:
     ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
 
     def __init__(self, client):
-        client.loop.create_task(self.fetch(client))
+        client.loop.create_task(self.fetch(client)) #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this
 
     async def fetch(self, client):
 
