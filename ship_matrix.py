@@ -5,17 +5,18 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-import threading
+# import threading
 import json
+import asyncio
 
 
 class ShipMatrix:
 
-    def __init__(self):
+    def __init__(self, client):
 
         fetcher = ShipMatrixFetcher()
 
-        fetcher.fetch()
+        client.loop.create_task(fetcher.fetch(client))
 
     def getAll(self):
         with open('fetched.json') as f:
@@ -36,7 +37,9 @@ class ShipMatrixFetcher:
 
     ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
 
-    def fetch(self):
+    async def fetch(self, client):
+
+        await client.wait_until_ready()
 
         ff = self.start_webdriver()
         print("Started webdriver")
@@ -45,7 +48,7 @@ class ShipMatrixFetcher:
         
         if (raw_shipmatrix==None):
             print("Failed to connect to website, retry in 10 mins...")
-            self.start_timmed_fether()
+            await asyncio.sleep(60*10)
             return
         print("Got shipmatrix in raw format")
 
@@ -58,12 +61,12 @@ class ShipMatrixFetcher:
 
         self.stop_webdriver(ff)
         print("Stopped webdriver")
-        self.start_timmed_fether()
+        await asyncio.sleep(60*10)
 
-    def start_timmed_fether(self):
-        threading.Timer(60*10, self.fetch).start()
-        print("Setted new timed thread")
-        print('------')
+    # def start_timmed_fether(self):
+    #     threading.Timer(60*10, self.fetch).start()
+    #     print("Setted new timed thread")
+    #     print('------')
 
     def start_webdriver(self):
 
