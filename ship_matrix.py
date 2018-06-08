@@ -5,17 +5,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-import threading
 import json
+import asyncio
 
 
 class ShipMatrix:
 
-    def __init__(self):
+    def __init__(self, client):
 
-        fetcher = ShipMatrixFetcher()
-
-        fetcher.fetch()
+        fetcher = ShipMatrixFetcher(client)
 
     def getAll(self):
         with open('fetched.json') as f:
@@ -36,36 +34,38 @@ class ShipMatrixFetcher:
 
     ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
 
-    def fetch(self):
+    def __init__(self, client):
+        client.loop.create_task(self.fetch(client))
 
-        ff = self.start_webdriver()
-        print("Started webdriver")
+    async def fetch(self, client):
 
-        raw_shipmatrix = self.get_raw_shipmatrix(ff, self.ship_matrix_URL)
-        
-        if (raw_shipmatrix==None):
-            print("Failed to connect to website, retry in 10 mins...")
-            self.start_timmed_fether()
-            return
-        print("Got shipmatrix in raw format")
+        while not client.is_closed:
 
-        ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
-        print("Parsed all ships to json format")
+            await client.wait_until_ready()
 
-        with open('fetched.json', 'w') as f:
-            f.write(ships)
-            print("Fetched all - cached into 'fetched.json'")
+            ff = await self.start_webdriver()
+            print("Started webdriver")
 
-        self.stop_webdriver(ff)
-        print("Stopped webdriver")
-        self.start_timmed_fether()
+            raw_shipmatrix = await self.get_raw_shipmatrix(ff, self.ship_matrix_URL)
+            
+            if (raw_shipmatrix==None):
+                print("Failed to connect to website, retry in 10 mins...")
+                await asyncio.sleep(60*10)
+                return
+            print("Got shipmatrix in raw format")
 
-    def start_timmed_fether(self):
-        threading.Timer(60*10, self.fetch).start()
-        print("Setted new timed thread")
-        print('------')
+            ships = await self.raw_shipmatrix_to_json(raw_shipmatrix)
+            print("Parsed all ships to json format")
 
-    def start_webdriver(self):
+            with open('fetched.json', 'w') as f:
+                f.write(ships)
+                print("Fetched all - cached into 'fetched.json'")
+
+            await self.stop_webdriver(ff)
+            print("Stopped webdriver")
+            await asyncio.sleep(60*10)
+
+    async def start_webdriver(self):
 
         options = opts()
         options.set_headless(headless=True)
@@ -76,7 +76,7 @@ class ShipMatrixFetcher:
 
         return ff
 
-    def get_raw_shipmatrix(self, ff, url):
+    async def get_raw_shipmatrix(self, ff, url):
 
         try:
             ff.get(url)
@@ -90,7 +90,7 @@ class ShipMatrixFetcher:
 
         return ship_matrix
 
-    def raw_shipmatrix_to_json(self, ship_matrix):
+    async def raw_shipmatrix_to_json(self, ship_matrix):
         ships = []
         for ship in ship_matrix:
             dict_entry = {}
@@ -107,5 +107,5 @@ class ShipMatrixFetcher:
             ships.append(dict_entry)
         return json.dumps(ships, indent=4)
 
-    def stop_webdriver(self, ff):
+    async def stop_webdriver(self, ff):
         ff.quit()
