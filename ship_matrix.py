@@ -84,12 +84,11 @@ class ShipMatrixFetcher:
 
     def get_raw_shipmatrix(self, ff, url):
 
-        ff.get(url)
-
         try:
+            ff.get(url)
             WebDriverWait(ff, 3).until(
                 EC.presence_of_element_located((By.ID, 'statsruler-top')))
-        finally:
+        except:
             self.stop_webdriver(ff)
             return
         ship_matrix = ff.find_element_by_id(
