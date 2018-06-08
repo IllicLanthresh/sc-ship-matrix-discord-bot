@@ -13,7 +13,7 @@ class ShipMatrix:
 
     def __init__(self, client):
 
-        fetcher = ShipMatrixFetcher(client)
+        fetcher = ShipMatrixFetcher(client) #TODO: use files only as backup at startup and use fetcher class to store the actual json object
 
     def getAll(self):
         with open('fetched.json') as f:
