@@ -33,20 +33,26 @@ class ShipMatrix:
 class ShipMatrixFetcher:
 
     ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
+    ff = None
+    client = None
 
-    def __init__(self, client):
-        client.loop.create_task(self.fetch(client))
+    def __init__(self, discordclient):
+        global ff
+        global client
+        client = discordclient
+        ff = self.start_webdriver()
+        print("Started webdriver")
+        client.loop.create_task(self.fetch())
 
-    async def fetch(self, client):
+    async def fetch(self):
+        global ff
+        global client
 
         while not client.is_closed:
 
             await client.wait_until_ready()
 
-            ff = await self.start_webdriver()
-            print("Started webdriver")
-
-            raw_shipmatrix = await self.get_raw_shipmatrix(ff, self.ship_matrix_URL)
+            raw_shipmatrix = await self.get_raw_shipmatrix()
             
             if (raw_shipmatrix==None):
                 print("Failed to connect to website, retry in 10 mins...")
@@ -61,31 +67,33 @@ class ShipMatrixFetcher:
                 f.write(ships)
                 print("Fetched all - cached into 'fetched.json'")
 
-            await self.stop_webdriver(ff)
-            print("Stopped webdriver")
+            # await self.stop_webdriver(ff)
+            # print("Stopped webdriver")
             await asyncio.sleep(30)
-        print("client is closed")
+        print("discord client is closed")
 
-    async def start_webdriver(self):
+    def start_webdriver(self):
 
         options = opts()
         options.set_headless(headless=True)
 
-        ff = wd.Firefox(firefox_options=options)
+        firefox = wd.Firefox(firefox_options=options)
 
         print("Setted WebDriver Firefox as headless mode")
 
-        return ff
+        return firefox
 
-    async def get_raw_shipmatrix(self, ff, url):
+    async def get_raw_shipmatrix(self):
+        global ff
 
         try:
-            ff.get(url)
+            ff.get(self.ship_matrix_URL)
             WebDriverWait(ff, 3).until(
                 EC.presence_of_element_located((By.ID, 'statsruler-top')))
         except:
-            await self.stop_webdriver(ff)
+            # await self.stop_webdriver(ff)
             return
+        await client.wait_until_ready()
         ship_matrix = ff.find_element_by_id(
             "shipscontainer").find_elements_by_class_name("ship")
 
@@ -106,6 +114,7 @@ class ShipMatrixFetcher:
                 "statbox").find_element_by_class_name("other").get_attribute("href")
 
             ships.append(dict_entry)
+            await client.wait_until_ready()
         return json.dumps(ships, indent=4)
 
     async def stop_webdriver(self, ff):
