@@ -4,6 +4,7 @@ import chunker
 
 client = discord.Client()
 matrix = ShipMatrix(client)
+client.loop.set_debug(True)
 
 @client.event
 async def on_message(message):
