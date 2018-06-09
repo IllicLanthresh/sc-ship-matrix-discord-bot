@@ -10,12 +10,13 @@ import asyncio
 
 
 class ShipMatrix:
-    global fetcher #TODO: change to private
+    global fetcher  # TODO: change to private
 
     def __init__(self, client):
         global fetcher
 
-        fetcher = ShipMatrixFetcher(client) #TODO: use files only as backup at startup and use fetcher class to store the actual json object
+        # TODO: use files only as backup at startup and use fetcher class to store the actual json object
+        fetcher = ShipMatrixFetcher(client)
 
     def getAll(self):
         global fetcher
@@ -23,14 +24,16 @@ class ShipMatrix:
         #     ships = json.load(f)
         ships = json.loads(fetcher.fetched)
         return ships
+
     def getFlightReady(self):
         # with open('fetched.json') as f:
         #     ships = json.load(f)
         ships = json.loads(fetcher.fetched)
-        
+
         filtered_ships = []
         for ship in ships:
-            if (ship['status'] == "Flight Ready"): filtered_ships.append(ship)
+            if (ship['status'] == "Flight Ready"):
+                filtered_ships.append(ship)
 
         return filtered_ships
 
@@ -63,7 +66,7 @@ class ShipMatrixFetcher:
 
             await client.wait_until_ready()
 
-            if (raw_shipmatrix==None):
+            if (raw_shipmatrix == None):
                 print("Failed to connect to website, retry in 10 mins...")
                 await asyncio.sleep(30)
                 continue
@@ -105,7 +108,7 @@ class ShipMatrixFetcher:
         except:
             # await self.stop_webdriver(ff)
             return
-        
+
         ship_matrix = ff.find_element_by_id(
             "shipscontainer").find_elements_by_class_name("ship")
 
