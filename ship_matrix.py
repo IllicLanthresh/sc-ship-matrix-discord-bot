@@ -10,18 +10,23 @@ import asyncio
 
 
 class ShipMatrix:
+    global fetcher #TODO: change to private
 
     def __init__(self, client):
+        global fetcher
 
         fetcher = ShipMatrixFetcher(client) #TODO: use files only as backup at startup and use fetcher class to store the actual json object
 
     def getAll(self):
-        with open('fetched.json') as f:
-            ships = json.load(f)
+        global fetcher
+        # with open('fetched.json') as f:
+        #     ships = json.load(f)
+        ships = json.loads(fetcher.fetched)
         return ships
     def getFlightReady(self):
-        with open('fetched.json') as f:
-            ships = json.load(f)
+        # with open('fetched.json') as f:
+        #     ships = json.load(f)
+        ships = json.loads(fetcher.fetched)
         
         filtered_ships = []
         for ship in ships:
@@ -35,6 +40,7 @@ class ShipMatrixFetcher:
     ship_matrix_URL = "https://robertsspaceindustries.com/ship-matrix"
     ff = None
     client = None
+    fetched = None
 
     def __init__(self, discordclient):
         global ff
@@ -47,13 +53,16 @@ class ShipMatrixFetcher:
     async def fetch(self):
         global ff
         global client
+        global fetched
 
         while not client.is_closed:
 
             await client.wait_until_ready()
 
             raw_shipmatrix = await self.get_raw_shipmatrix()
-            
+
+            await client.wait_until_ready()
+
             if (raw_shipmatrix==None):
                 print("Failed to connect to website, retry in 10 mins...")
                 await asyncio.sleep(30)
@@ -63,9 +72,12 @@ class ShipMatrixFetcher:
             ships = await self.raw_shipmatrix_to_json(raw_shipmatrix)
             print("Parsed all ships to json format")
 
-            with open('fetched.json', 'w') as f:
-                f.write(ships)
-                print("Fetched all - cached into 'fetched.json'")
+            # with open('fetched.json', 'w') as f:
+            #     f.write(ships)
+            #     print("Fetched all - cached into 'fetched.json'")
+
+            fetched = ships
+            print("Fetched all - cached in memory")
 
             # await self.stop_webdriver(ff)
             # print("Stopped webdriver")
@@ -93,7 +105,7 @@ class ShipMatrixFetcher:
         except:
             # await self.stop_webdriver(ff)
             return
-        await client.wait_until_ready()
+        
         ship_matrix = ff.find_element_by_id(
             "shipscontainer").find_elements_by_class_name("ship")
 
