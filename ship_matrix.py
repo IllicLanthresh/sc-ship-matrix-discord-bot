@@ -44,15 +44,17 @@ class ShipMatrixFetcher:
     ff = None
     client = None
     fetched = None
-    fetchedTimeMins = 10
+    fetchedTimeMins = 0.5
 
     def __init__(self, discordclient):
-        client = discordclient
+        self.client = discordclient
         self.ff = self.start_webdriver()
         print("Started webdriver")
-        client.loop.create_task(self.fetch())
+        self.client.loop.create_task(self.fetch())
 
     async def fetch(self):
+
+        await self.client.wait_until_ready()
 
         while not self.client.is_closed:
 
