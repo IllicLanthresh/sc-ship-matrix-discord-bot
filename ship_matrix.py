@@ -44,15 +44,17 @@ class ShipMatrixFetcher:
     ff = None
     client = None
     fetched = None
-    fetchedTimeMins = 10
+    fetchedTimeMins = 0.5
 
     def __init__(self, discordclient):
-        client = discordclient
+        self.client = discordclient
         self.ff = self.start_webdriver()
         print("Started webdriver")
-        client.loop.create_task(self.fetch()) #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this
+        self.client.loop.create_task(self.fetch()) #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this
 
     async def fetch(self):
+
+        await self.client.wait_until_ready()
 
         while not self.client.is_closed:
 
