@@ -11,28 +11,20 @@ import asyncio
 
 
 class ShipMatrix:
-    global fetcher  # TODO: change to private
+    fetcher = None
 
     def __init__(self, client):
-        global fetcher
 
-        # TODO: use files only as backup at startup and use fetcher class to store the actual json object
-        fetcher = ShipMatrixFetcher(client)
+        self.fetcher = ShipMatrixFetcher(client)
 
     def getAll(self):
-        global fetcher
-        # with open('fetched.json') as f:
-        #     ships = json.load(f)
-        ships = json.loads(fetcher.fetched)
-        return ships
+
+        return self.fetcher.fetched
 
     def getFlightReady(self):
-        # with open('fetched.json') as f:
-        #     ships = json.load(f)
-        ships = json.loads(fetcher.fetched)
 
         filtered_ships = []
-        for ship in ships:
+        for ship in self.fetcher.fetched:
             if (ship['status'] == "Flight Ready"):
                 filtered_ships.append(ship)
 
@@ -70,13 +62,10 @@ class ShipMatrixFetcher:
                 continue
             print("Got shipmatrix in raw format")
 
-            ships = self.raw_shipmatrix_to_json_string(raw_shipmatrix)
+            ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
             print("Parsed all ships to json format")
 
-            with open('fetched.json', 'r') as f:
-                cached_ships = f.read()
-
-            if (cached_ships != ships):
+            if (self.fetched != ships):
                 #changes on shipmatrix, TODO:look for changes and send msg to discord
                 #       "{'0': {'$delete': ['link']}, '1': {'status': 'In Concept', '$delete': ['link']}}
                 #        >>> print(json.dumps(c, indent=4))
@@ -93,22 +82,14 @@ class ShipMatrixFetcher:
                 #                ]
                 #            }
                 #        }"
-                cached_json = json.loads(cached_ships)
-                ships_json = json.loads(ships)
-
-
-
-                # with open('fetched.json', 'w') as f:
-                #     f.write(ships)
-                #     print("Fetched all - cached into 'fetched.json'")
+                self.fetched    #cached_json
+                ships           #ships_json
 
                 self.fetched = ships
                 print("Fetched all - cached in memory")
             else:
                 print("No changes on ship matrix keep current chached version")
 
-            # await self.stop_webdriver(ff)
-            # print("Stopped webdriver")
             await asyncio.sleep(self.fetchedTimeMins*60)
         print("discord client is closed")
 
@@ -130,7 +111,6 @@ class ShipMatrixFetcher:
             WebDriverWait(self.ff, 3).until(
                 EC.presence_of_element_located((By.ID, 'statsruler-top')))
         except:
-            # await self.stop_webdriver(ff)
             return
 
         ship_matrix = self.ff.find_element_by_id(
@@ -138,7 +118,7 @@ class ShipMatrixFetcher:
 
         return ship_matrix
 
-    async def raw_shipmatrix_to_json_string(self, ship_matrix):
+    async def raw_shipmatrix_to_json(self, ship_matrix):
 
         ships = []
         for ship in ship_matrix:
@@ -155,7 +135,7 @@ class ShipMatrixFetcher:
 
             ships.append(dict_entry)
             await self.client.wait_until_ready()
-        return json.dumps(ships, indent=4)
+        return ships
 
     async def stop_webdriver(self, ff):
         ff.quit()
