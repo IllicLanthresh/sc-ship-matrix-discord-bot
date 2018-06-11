@@ -85,6 +85,7 @@ class ShipMatrixFetcher:
                 #        }"
                 
                 ######################################## TODO TODO TODO!!!! use DeepDiff!!!!
+                # [value['new_value'] for key, value in DeepDiff(a,b)['values_changed'].items() if key.endswith("status\']")]
 
                 self.fetched    #cached_json
                 ships           #ships_json
