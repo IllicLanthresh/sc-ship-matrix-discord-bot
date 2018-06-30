@@ -60,6 +60,9 @@ class ShipMatrixFetcher:
         print("Parsed all ships to json format")
 
         if (self.fetched != ships):
+            #TODO: add IF statement to check if "fetched" is None(to check if its firts boot)
+
+
             # print(json.dumps(json.loads(diff(a,b, load=False, dump=True)),indent=4))
             #changes on shipmatrix, TODO:look for changes and send msg to discord
             #       "{'0': {'$delete': ['link']}, '1': {'status': 'In Concept', '$delete': ['link']}}
