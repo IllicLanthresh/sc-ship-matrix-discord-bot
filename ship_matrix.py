@@ -45,7 +45,7 @@ class ShipMatrixFetcher:
     ff = None
     client = None
     fetched = None
-    minsBetweenFetch = 10
+    minsBetweenFetch = 1
 
     def __init__(self, discordclient):
         self.client = discordclient
@@ -59,7 +59,7 @@ class ShipMatrixFetcher:
         if (raw_shipmatrix == None):
             print("Failed to connect to website, retry in " +
                     self.minsBetweenFetch + " mins...")
-            Timer(60*self.minsBetweenFetch, self.fetch)
+            Timer(60*self.minsBetweenFetch, self.fetch).start()
             return
         print("Got shipmatrix in raw format")
 
@@ -75,7 +75,7 @@ class ShipMatrixFetcher:
 
         # self.stop_webdriver(ff)
         # print("Stopped webdriver")
-        Timer(60*self.minsBetweenFetch, self.fetch)
+        Timer(60*self.minsBetweenFetch, self.fetch).start()
         
 
     def start_webdriver(self):
