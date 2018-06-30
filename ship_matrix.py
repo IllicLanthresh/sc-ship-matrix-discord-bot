@@ -45,7 +45,7 @@ class ShipMatrixFetcher:
     ff = None
     client = None
     fetched = None
-    minsBetweenFetch = 1
+    minsBetweenFetch = 10
 
     def __init__(self, discordclient):
         self.client = discordclient
