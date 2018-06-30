@@ -60,8 +60,11 @@ class ShipMatrixFetcher:
         print("Parsed all ships to json format")
 
         if (self.fetched != ships):
-            #TODO: add IF statement to check if "fetched" is None(to check if its firts boot)
-
+            if(self.fetched == None):
+                self.fetched = ships
+                print("Fetched all - cached in memory")
+                Timer(60*self.minsBetweenFetch, self.fetch).start()
+                return
 
             # print(json.dumps(json.loads(diff(a,b, load=False, dump=True)),indent=4))
             #changes on shipmatrix, TODO:look for changes and send msg to discord
@@ -84,8 +87,8 @@ class ShipMatrixFetcher:
             ######################################## TODO TODO TODO!!!! use DeepDiff!!!!
             # [value['new_value'] for key, value in DeepDiff(a,b)['values_changed'].items() if key.endswith("status\']")]
 
-            self.fetched    #cached_json
-            ships           #ships_json
+            self.fetched    #cached json
+            ships           #srapped ships json
 
             self.fetched = ships
             print("Fetched all - cached in memory")
