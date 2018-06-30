@@ -51,7 +51,7 @@ class ShipMatrixFetcher:
         self.client = discordclient
         self.ff = self.start_webdriver()
         print("Started webdriver")
-        self.client.loop.create_task(self.fetch()) #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this
+        self.fetch() #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this ---MAYBE THIS IS USELESS NOW THAT WE USE THREADS
 
     def fetch(self):
         raw_shipmatrix = self.get_raw_shipmatrix()
