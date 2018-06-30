@@ -5,9 +5,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+from threading import Timer
+
 import json
 from jsondiff import diff
-import asyncio
 
 
 class ShipMatrix:
@@ -37,66 +38,58 @@ class ShipMatrixFetcher:
     ff = None
     client = None
     fetched = None
-    fetchedTimeMins = 10
+    minsBetweenFetch = 10
 
     def __init__(self, discordclient):
-        client = discordclient
+        self.client = discordclient
         self.ff = self.start_webdriver()
         print("Started webdriver")
-        client.loop.create_task(self.fetch()) #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this
+        self.fetch() #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this ---MAYBE THIS IS USELESS NOW THAT WE USE THREADS
 
-    async def fetch(self):
+    def fetch(self):
+        raw_shipmatrix = self.get_raw_shipmatrix()
 
-        while not self.client.is_closed:
+        if (raw_shipmatrix == None):
+            print("Failed to connect to website, retry in " +
+                    self.minsBetweenFetch + " mins...")
+            Timer(60*self.minsBetweenFetch, self.fetch).start()
+            return
+        print("Got shipmatrix in raw format")
 
-            await self.client.wait_until_ready()
+        ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
+        print("Parsed all ships to json format")
 
-            raw_shipmatrix = await self.get_raw_shipmatrix()
+        if (self.fetched != ships):
+            # print(json.dumps(json.loads(diff(a,b, load=False, dump=True)),indent=4))
+            #changes on shipmatrix, TODO:look for changes and send msg to discord
+            #       "{'0': {'$delete': ['link']}, '1': {'status': 'In Concept', '$delete': ['link']}}
+            #        >>> print(json.dumps(c, indent=4))
+            #        {
+            #            "0": {
+            #                "$delete": [
+            #                    "link"
+            #                ]
+            #            },
+            #            "1": {
+            #                "status": "In Concept",
+            #                "$delete": [
+            #                    "link"
+            #                ]
+            #            }
+            #        }"
+            
+            ######################################## TODO TODO TODO!!!! use DeepDiff!!!!
+            # [value['new_value'] for key, value in DeepDiff(a,b)['values_changed'].items() if key.endswith("status\']")]
 
-            await self.client.wait_until_ready()
+            self.fetched    #cached_json
+            ships           #ships_json
 
-            if (raw_shipmatrix == None):
-                print("Failed to connect to website, retry in " +
-                      self.fetchedTimeMins + " mins...")
-                await asyncio.sleep(self.fetchedTimeMins*60)
-                continue
-            print("Got shipmatrix in raw format")
+            self.fetched = ships
+            print("Fetched all - cached in memory")
+        else:
+            print("No changes on ship matrix keep current chached version")
 
-            ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
-            print("Parsed all ships to json format")
-
-            if (self.fetched != ships):
-                # print(json.dumps(json.loads(diff(a,b, load=False, dump=True)),indent=4))
-                #changes on shipmatrix, TODO:look for changes and send msg to discord
-                #       "{'0': {'$delete': ['link']}, '1': {'status': 'In Concept', '$delete': ['link']}}
-                #        >>> print(json.dumps(c, indent=4))
-                #        {
-                #            "0": {
-                #                "$delete": [
-                #                    "link"
-                #                ]
-                #            },
-                #            "1": {
-                #                "status": "In Concept",
-                #                "$delete": [
-                #                    "link"
-                #                ]
-                #            }
-                #        }"
-                
-                ######################################## TODO TODO TODO!!!! use DeepDiff!!!!
-                # [value['new_value'] for key, value in DeepDiff(a,b)['values_changed'].items() if key.endswith("status\']")]
-
-                self.fetched    #cached_json
-                ships           #ships_json
-
-                self.fetched = ships
-                print("Fetched all - cached in memory")
-            else:
-                print("No changes on ship matrix keep current chached version")
-
-            await asyncio.sleep(self.fetchedTimeMins*60)
-        print("discord client is closed")
+        Timer(60*self.minsBetweenFetch, self.fetch).start()
 
     def start_webdriver(self):
 
@@ -109,7 +102,7 @@ class ShipMatrixFetcher:
 
         return firefox
 
-    async def get_raw_shipmatrix(self):
+    def get_raw_shipmatrix(self):
 
         try:
             self.ff.get(self.ship_matrix_URL)
@@ -123,8 +116,7 @@ class ShipMatrixFetcher:
 
         return ship_matrix
 
-    async def raw_shipmatrix_to_json(self, ship_matrix):
-
+    def raw_shipmatrix_to_json(self, ship_matrix):
         ships = []
         for ship in ship_matrix:
             dict_entry = {}
@@ -139,8 +131,9 @@ class ShipMatrixFetcher:
                 "statbox").find_element_by_class_name("other").get_attribute("href")
 
             ships.append(dict_entry)
-            await self.client.wait_until_ready()
+            
         return ships
 
-    async def stop_webdriver(self, ff):
+
+    def stop_webdriver(self, ff):
         ff.quit()
