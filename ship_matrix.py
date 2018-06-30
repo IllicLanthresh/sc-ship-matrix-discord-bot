@@ -8,7 +8,10 @@ from selenium.webdriver.common.by import By
 from threading import Timer
 
 import json
-from jsondiff import diff
+import re
+from deepdiff import DeepDiff
+
+
 
 
 class ShipMatrix:
@@ -65,30 +68,26 @@ class ShipMatrixFetcher:
                 print("Fetched all - cached in memory")
                 Timer(60*self.minsBetweenFetch, self.fetch).start()
                 return
-
-            # print(json.dumps(json.loads(diff(a,b, load=False, dump=True)),indent=4))
-            #changes on shipmatrix, TODO:look for changes and send msg to discord
-            #       "{'0': {'$delete': ['link']}, '1': {'status': 'In Concept', '$delete': ['link']}}
-            #        >>> print(json.dumps(c, indent=4))
-            #        {
-            #            "0": {
-            #                "$delete": [
-            #                    "link"
-            #                ]
-            #            },
-            #            "1": {
-            #                "status": "In Concept",
-            #                "$delete": [
-            #                    "link"
-            #                ]
-            #            }
-            #        }"
             
+            for key, value in DeepDiff(self.fetched, ships)['values_changed'].items():
+                index_changed = re.compile("root\[(\d+)\]\['(\w+)").match(key)[1]
+                old_name = self.fetched[index_changed]['name']
+                new_name = ships[index_changed]['name']
+                stat_changed = re.compile("root\[(\d+)\]\['(\w+)").match(key)[2]
+
+                ## IMPORTANT, deepdiff result is in a different order every call, also there's a pair of "key, value" for each change, not for every item changed, keep that in mind
+
+                if (old_name != new_name):
+                    #name changed
+                else:
+                    #name not changed
+                
+
+
+
             ######################################## TODO TODO TODO!!!! use DeepDiff!!!!
             # [value['new_value'] for key, value in DeepDiff(a,b)['values_changed'].items() if key.endswith("status\']")]
 
-            self.fetched    #cached json
-            ships           #srapped ships json
 
             self.fetched = ships
             print("Fetched all - cached in memory")
