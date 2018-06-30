@@ -5,8 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+from threading import Timer
+
 import json
-import asyncio
 
 
 class ShipMatrix:
@@ -44,47 +45,38 @@ class ShipMatrixFetcher:
     ff = None
     client = None
     fetched = None
-    fetchedTimeMins = 10
+    minsBetweenFetch = 10
 
     def __init__(self, discordclient):
         self.client = discordclient
         self.ff = self.start_webdriver()
         print("Started webdriver")
-        self.client.loop.create_task(self.fetch()) #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this
+        self.fetch() #TODO: move this to 'discord-bot.py', passing 'fetch()' function pointer to it using function pointer variable on 'ShipMatrix' called 'fetchFP', then execute 'client.run()' BEFORE this ---MAYBE THIS IS USELESS NOW THAT WE USE THREADS
 
-    async def fetch(self):
+    def fetch(self):
+        raw_shipmatrix = self.get_raw_shipmatrix()
 
-        await self.client.wait_until_ready()
+        if (raw_shipmatrix == None):
+            print("Failed to connect to website, retry in " +
+                    self.minsBetweenFetch + " mins...")
+            Timer(60*self.minsBetweenFetch, self.fetch).start()
+            return
+        print("Got shipmatrix in raw format")
 
-        while not self.client.is_closed:
+        ships = self.raw_shipmatrix_to_json(raw_shipmatrix)
+        print("Parsed all ships to json format")
 
-            await self.client.wait_until_ready()
+        # with open('fetched.json', 'w') as f:
+        #     f.write(ships)
+        #     print("Fetched all - cached into 'fetched.json'")
 
-            raw_shipmatrix = await self.get_raw_shipmatrix()
+        self.fetched = ships
+        print("Fetched all - cached in memory")
 
-            await self.client.wait_until_ready()
-
-            if (raw_shipmatrix == None):
-                print("Failed to connect to website, retry in " +
-                      self.fetchedTimeMins + " mins...")
-                await asyncio.sleep(self.fetchedTimeMins*60)
-                continue
-            print("Got shipmatrix in raw format")
-
-            ships = await self.raw_shipmatrix_to_json(raw_shipmatrix)
-            print("Parsed all ships to json format")
-
-            # with open('fetched.json', 'w') as f:
-            #     f.write(ships)
-            #     print("Fetched all - cached into 'fetched.json'")
-
-            self.fetched = ships
-            print("Fetched all - cached in memory")
-
-            # await self.stop_webdriver(ff)
-            # print("Stopped webdriver")
-            await asyncio.sleep(self.fetchedTimeMins*60)
-        print("discord client is closed")
+        # self.stop_webdriver(ff)
+        # print("Stopped webdriver")
+        Timer(60*self.minsBetweenFetch, self.fetch).start()
+        
 
     def start_webdriver(self):
 
@@ -97,14 +89,14 @@ class ShipMatrixFetcher:
 
         return firefox
 
-    async def get_raw_shipmatrix(self):
+    def get_raw_shipmatrix(self):
 
         try:
             self.ff.get(self.ship_matrix_URL)
             WebDriverWait(self.ff, 3).until(
                 EC.presence_of_element_located((By.ID, 'statsruler-top')))
         except:
-            # await self.stop_webdriver(ff)
+            # self.stop_webdriver(ff)
             return
 
         ship_matrix = self.ff.find_element_by_id(
@@ -112,7 +104,7 @@ class ShipMatrixFetcher:
 
         return ship_matrix
 
-    async def raw_shipmatrix_to_json(self, ship_matrix):
+    def raw_shipmatrix_to_json(self, ship_matrix):
         ships = []
         for ship in ship_matrix:
             dict_entry = {}
@@ -127,8 +119,7 @@ class ShipMatrixFetcher:
                 "statbox").find_element_by_class_name("other").get_attribute("href")
 
             ships.append(dict_entry)
-            await self.client.wait_until_ready()
         return json.dumps(ships, indent=4)
 
-    async def stop_webdriver(self, ff):
+    def stop_webdriver(self, ff):
         ff.quit()
